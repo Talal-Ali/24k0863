@@ -1,0 +1,6 @@
+Article Quality Report
+-----------------------
+Total Characters       : 764
+Total Words            : 122
+Total Lines            : 17
+Punctuation Marks Count: 17

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        .loginpage{
+            padding: 60px;
+            background-color: rgba(215, 150, 29, 0.889);
+
+        }
+        input[type = text], input[type = password]
+        {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button{
+            background-color: #04AA6D;
+            color: black;
+            padding: 14px 20px;
+            margin: 8px 0;
+            width: 100%;
+        }
+        button[type="reset"] {
+            background-color: #f44336;
+        }
+    </style>
+    <form id="LoginForm">
+        <div id = "login", class = "loginpage">
+            <div id = "container">
+            <p><b>Username</b></p>
+            <input type="text" placeholder="Enter Username" name="uname" required>
+            <p><b>Password</b></p>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+            <p>Remember me</p>
+            <input type="checkbox" id="remember" name="remember">
+            <div id = "button">
+                <button type= "button" onclick = Login()>Login</button>
+                <button type= "reset">Reset</button>
+            </div>
+            
+            
+            </div>
+    
+        </div>
+    </form>
+    
+    <script>
+        function Login() {
+            var user = document.getElementsByName("uname")[0].value;
+            var pass = document.getElementsByName("psw")[0].value;
+            if(user == "admin" && pass== 1234)
+            {
+                alert("Welcome!");
+            }
+            else{
+                alert("Wrong username or/and password");
+            }
+            
+        }
+    </script>
+</body>
+</html>
