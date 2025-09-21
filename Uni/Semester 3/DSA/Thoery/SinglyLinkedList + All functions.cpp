@@ -279,6 +279,46 @@ class LinkedList{
 
             return palindrome;
         }
+        //Leetcode
+        void reverseSublist(int start, int end)
+        {
+            if (start >= end || head == nullptr)
+            {
+                cout << "Invalid Positions" << endl;
+                return;
+            }
+
+            Node dummy(0, head);
+            Node* prev = &dummy;
+
+            
+            for (int i = 1; i < start; i++)
+            {
+                if (prev->getnextNode() == nullptr)
+                {
+                    cout << "Start position out of range" << endl;
+                    return;
+                }
+                prev = prev->getnextNode();
+            }
+
+            
+            Node* sublistTail = prev->getnextNode();
+            Node* curr = sublistTail->getnextNode();
+            for (int i = start; i < end && curr != nullptr; i++)
+            {
+                Node* next = curr->getnextNode();
+                curr->setnextNode(prev->getnextNode());
+                prev->setnextNode(curr);
+                curr = next;
+            }
+
+            //reconnect tail to remaining part
+            sublistTail->setnextNode(curr);
+
+            //update head (in case start == 1)
+            head = dummy.getnextNode();
+    }
 
 };
 
@@ -319,6 +359,7 @@ int main()
     l.sort();
     cout<<"After Sorting"<<endl;
     l.display();
-
+    l.reverseSublist(2, 4);
+    l.display();
     
 }
