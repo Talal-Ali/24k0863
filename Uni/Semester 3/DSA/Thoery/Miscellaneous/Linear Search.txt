@@ -1,0 +1,12 @@
+//Linear Search
+//Binary Search
+//Interpolation search
+
+//Bubble Sort
+Insertion sort
+Selection Sort
+Comb Sort
+Shell Sort
+
+
+Merge Sort(Kal)
