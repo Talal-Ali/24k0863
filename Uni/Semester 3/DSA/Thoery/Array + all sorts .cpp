@@ -392,41 +392,40 @@
                 temp = array[i];
                 rShellSort(gap, i, i, temp, true);
             }
-        void merge(int *arr, int left, int right, int mid)
+        void merge(int *arr, int left, int mid, int right)
         {
-            int n1 = mid-left+1;
-            int n2 = right -mid;
+            int n1 = mid - left + 1;
+            int n2 = right - mid;
 
-            int *l = new int[n1];
-            int *r = new int[n2];
+            int *L = new int[n1];
+            int *R = new int[n2];
 
-            for (int i=0; i<n1; i++)
-            {
-                l[i] = arr[left +i];
-            }
-            for (int i=0; i<n1; i++)
-            {
-                r[i] = arr[mid + i +1];
-            }
-            int i=0, j=0, k = left;
-            while(i<n1&& j<n2)
-            {
-                if(l[i] <= r[i])
-                {
-                    arr[k++] = l[i++];
-                }
-                else{
-                    arr[k++] = r[j++];
-                }
-            }
-                while (i < n1)
-                    arr[k++] = l[i++];
-                while (j < n2)
-                    arr[k++] = r[j++];
+            for (int i = 0; i < n1; i++)
+                L[i] = arr[left + i];
+            for (int j = 0; j < n2; j++)
+                R[j] = arr[mid + 1 + j];
 
-            delete [] l;
-            delete [] r;
+            int i = 0, j = 0, k = left;
+
+            while (i < n1 && j < n2)
+            {
+                if (L[i] <= R[j])
+                    arr[k++] = L[i++];
+                else
+                    arr[k++] = R[j++];
+            }
+
+
+            while (i < n1)
+                arr[k++] = L[i++];
+
+            while (j < n2)
+                arr[k++] = R[j++];
+
+            delete[] L;
+            delete[] R;
         }
+
         void imergesort()
         {
             for(int curSize = 1; curSize<= size -1; curSize*=2)
@@ -439,22 +438,17 @@
                 }
             }
         }
-        void rmergesort(int curSize, int left)
+        void rmergesort(int left, int right)
         {
-            if(curSize>size -1)
+            if (left >= right)
                 return;
-            if(left < size-1)
-            {
-                int mid = min(left + curSize -1, size -1);
-                int right  = min(left + 2 * curSize -1, size-1);
-                merge(array, left, right, mid);
-                rmergesort(curSize, left + 2*curSize);
-            }
-            else
-            {
-                rmergesort(curSize *2, 0);
-            }
-            
+
+            int mid = left + (right - left) / 2;
+
+            rmergesort(left, mid);
+            rmergesort(mid + 1, right);
+
+            merge(array, left, mid, right);
         }
         void quick_sort_Naive()
         {
