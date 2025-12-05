@@ -290,7 +290,6 @@ class LinkedList{
 
             Node dummy(0, head);
             Node* prev = &dummy;
-
             
             for (int i = 1; i < start; i++)
             {
