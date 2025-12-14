@@ -1,169 +1,135 @@
-#include<iostream>
-#include<math.h>
+#include <iostream>
 using namespace std;
 
-class avl
-{
+class avl {
 public:
     int val;
     avl* left;
     avl* right;
     int height;
-    avl():val(0), left(nullptr), right(nullptr), height(0){}
-    avl(int v):val(v), left(nullptr), right(nullptr), height(0){}
 
-    int getheight(avl* root)
-    {
-        if(root == nullptr){return 0;}
-        return root->height;
+    avl() : val(0), left(nullptr), right(nullptr), height(1) {}
+    avl(int v) : val(v), left(nullptr), right(nullptr), height(1) {}
+
+    int getHeight(avl* node) {
+        if (node == nullptr) return 0;
+        return node->height;
     }
-    int balance(avl* root)
-    {
-        int b = getheight(root->left) - getheight(root->right);
-        return b;
+
+    int getBalance(avl* node) {
+        if (node == nullptr) return 0;
+        return getHeight(node->left) - getHeight(node->right);
     }
-    void updateheight(avl* root)
-    {
-        root->height = 1 + max(getheight(root->left),getheight(root->right));
+
+    void updateHeight(avl* node) {
+        node->height = 1 + max(getHeight(node->left), getHeight(node->right));
     }
-    avl* leftleft(avl* root)
-    {
+
+    avl* leftLeft(avl* root) {
         avl* x = root->left;
         avl* t2 = x->right;
 
         x->right = root;
         root->left = t2;
 
-        updateheight(root);
-        updateheight(x);
+        updateHeight(root);
+        updateHeight(x);
         return x;
     }
-    avl* rightright(avl* root)
-    {
+
+    avl* rightRight(avl* root) {
         avl* x = root->right;
         avl* t2 = x->left;
 
         x->left = root;
         root->right = t2;
 
-        updateheight(root);
-        updateheight(x);
+        updateHeight(root);
+        updateHeight(x);
         return x;
     }
-    avl* leftright(avl* root)
-    {
-        root->left = rightright(root);
-        return leftleft(root);
+
+    avl* leftRight(avl* root) {
+        root->left = rightRight(root->left);
+        return leftLeft(root);
     }
-    avl* rightleft(avl* root)
-    {
-        root->right = leftleft(root);
-        return rightright(root);
+
+    avl* rightLeft(avl* root) {
+        root->right = leftLeft(root->right);
+        return rightRight(root);
     }
-    avl* insert(int n, avl* root)
-    {
+
+    avl* insert(avl* root, int key) {
         if (root == nullptr)
-            return new avl(n);
+            return new avl(key);
 
-        if (n < root->val){
-            root->left = insert(n, root->left);
-        }
-        else if (n > root->val)
-        {
-            root->right = insert(n, root->right);
-        } 
+        if (key < root->val)
+            root->left = insert(root->left, key);
+        else if (key > root->val)
+            root->right = insert(root->right, key);
         else
-        {
             return root;
-        }
-        updateheight(root);
-        int b = balance(root);
-        //LL Case
-        if(b>1 && n<root->left->val)
-        {
-            return leftleft(root);
-        }
-        //RR Case
-        if(b<-1 && n>root->right->val)
-        {
-            return rightright(root);
-        }
-        //LR Case
-        if(b>1 && n>root->left->val)
-        {
-            return leftright(root);
-        }
-        //RL CAse
-        if(b<-1 && n<root->right->val)
-        {
-            return rightleft(root);
-        }
-        
+
+        updateHeight(root);
+        int b = getBalance(root);
+
+        if (b > 1 && key < root->left->val)
+            return leftLeft(root);
+        if (b < -1 && key > root->right->val)
+            return rightRight(root);
+        if (b > 1 && key > root->left->val)
+            return leftRight(root);
+        if (b < -1 && key < root->right->val)
+            return rightLeft(root);
+
         return root;
     }
-    avl* deleteNodes(avl* root, int n)
-    {
-        if(root == nullptr){return nullptr;}
-        if(n<root->val){root->left = deleteNodes(root->left, n);}
-        else if(n>root->val){root->right = deleteNodes(root->right, n);}
-        else{
-            if(!root->left && !root->right)
-            {
-                delete root;
-                return nullptr;
-            }
-            if(!root->left)
-            {
-                avl* temp = root->right;
-                delete root;
-                root = temp;
-                return temp;
-            }
-            if(!root->right)
-            {
-                avl* temp = root->left;
-                delete root;
-                root = temp;
-                return temp;
-            }
-            if(root->left && root->right)
-            {
-                avl* successor = root->right;
-                while(successor->left)
-                {
-                    successor = successor->left;
+
+    avl* minValueNode(avl* node) {
+        avl* curr = node;
+        while (curr->left != nullptr)
+            curr = curr->left;
+        return curr;
+    }
+
+    avl* deleteNode(avl* root, int key) {
+        if (root == nullptr)
+            return root;
+
+        if (key < root->val)
+            root->left = deleteNode(root->left, key);
+        else if (key > root->val)
+            root->right = deleteNode(root->right, key);
+        else {
+            if (root->left == nullptr || root->right == nullptr) {
+                avl* temp = root->left ? root->left : root->right;
+                if (temp == nullptr) {
+                    delete root;
+                    return nullptr;
+                } else {
+                    avl* curr = temp;
+                    delete root;
+                    return curr;
                 }
-                root->val = successor->val;
-                root->right = deleteNodes(root->right, successor->val);
-            }
-            
-        }
-        updateheight(root);
-        int b = balance(root);
-        if(b>1)
-        {
-            if(balance(root->left)>=0)
-            {
-                return leftleft(root);
-            }
-            else
-            {
-                return leftright(root);
+            } else {
+                avl* temp = minValueNode(root->right);
+                root->val = temp->val;
+                root->right = deleteNode(root->right, temp->val);
             }
         }
-        if(b<-1)
-        {
-            if(balance(root->right) <= 0)
-            {
-                return rightright(root);
-            }
-            else
-            {
-                return rightleft(root);
-            }
-        }
+
+        updateHeight(root);
+        int b = getBalance(root);
+
+        if (b > 1 && getBalance(root->left) >= 0)
+            return leftLeft(root);
+        if (b > 1 && getBalance(root->left) < 0)
+            return leftRight(root);
+        if (b < -1 && getBalance(root->right) <= 0)
+            return rightRight(root);
+        if (b < -1 && getBalance(root->right) > 0)
+            return rightLeft(root);
 
         return root;
     }
-
 };
