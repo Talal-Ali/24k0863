@@ -5,6 +5,9 @@
     {
       "AbsoluteMoniker": "D:0:0:{24C4AEA8-7351-46C1-B531-7A8DA50139DB}|Lab Tasks 1.vcxproj|D:\\Uni\\Semester 3\\COAL\\Lab\\Lab Tasks 1\\Source.asm||{8B382828-6202-11D1-8870-0000F87579D2}",
       "RelativeMoniker": "D:0:0:{24C4AEA8-7351-46C1-B531-7A8DA50139DB}|Lab Tasks 1.vcxproj|solutionrelative:Source.asm||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Microsoft\\VC\\v170\\BuildCustomizations\\masm.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,8 +17,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "masm.targets",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Microsoft\\VC\\v170\\BuildCustomizations\\masm.targets",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Microsoft\\VC\\v170\\BuildCustomizations\\masm.targets",
+              "ViewState": "AgIAADsAAAAAAAAAAAAvwEUAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-10-18T09:04:00.982Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,7 +38,7 @@
               "RelativeDocumentMoniker": "Source.asm",
               "ToolTip": "D:\\Uni\\Semester 3\\COAL\\Lab\\Lab Tasks 1\\Source.asm",
               "RelativeToolTip": "Source.asm",
-              "ViewState": "AgIAABIAAAAAAAAAAAAgwBcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAF0AAAAAAAAAAAAswG8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-09-03T15:08:32.422Z",
               "EditorCaption": ""

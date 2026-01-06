@@ -1,0 +1,25 @@
+White
+
+| Main Color    | Hex       | Best Contrast (Accent) | Hex       |
+| ------------- | --------- | ---------------------- | --------- |
+| Black         | `#000000` | Sky Blue               | `#3B82F6` |
+| Deep Blue     | `#1E3A8A` | Orange                 | `#F97316` |
+| Bright Red    | `#DC2626` | Leaf Green             | `#16A34A` |
+| Rich Purple   | `#7E22CE` | Gold Yellow            | `#FBBF24` |
+| Teal          | `#0D9488` | Coral                  | `#FB7185` |
+| Warm Amber    | `#F59E0B` | Navy                   | `#1E40AF` |
+| Dark Gray     | `#374151` | Mint Green             | `#86EFAC` |
+| Medium Violet | `#A855F7` | Light Peach            | `#FCA5A5` |
+
+Black
+
+| Main Color  | Hex       | Best Contrast (Accent) | Hex       |
+| ----------- | --------- | ---------------------- | --------- |
+| White       | `#FFFFFF` | Electric Blue          | `#7DF9FF` |
+| Gold Yellow | `#FFD700` | Magenta                | `#FF00FF` |
+| Cyan        | `#00FFFF` | Hot Pink               | `#FF69B4` |
+| Neon Green  | `#39FF14` | Bright Orange          | `#FF4500` |
+| Light Pink  | `#FFB6C1` | Aqua Blue              | `#00BFFF` |
+| Soft Lemon  | `#F9F871` | Deep Sky Blue          | `#00BFFF` |
+| Lavender    | `#E6E6FA` | Pale Aqua              | `#B5FFFC` |
+| Peach       | `#FFC3A0` | Turquoise              | `#40E0D0` |

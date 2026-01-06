@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Uni\\Semester 3\\COAL\\Theory\\COAL Project\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D2844CF4-12C9-411D-9B8B-3CEEE814378C}|COAL Project.vcxproj|D:\\Uni\\Semester 3\\COAL\\Theory\\COAL Project\\SourceCode.asm||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{D2844CF4-12C9-411D-9B8B-3CEEE814378C}|COAL Project.vcxproj|solutionrelative:SourceCode.asm||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SourceCode.asm",
+              "DocumentMoniker": "D:\\Uni\\Semester 3\\COAL\\Theory\\COAL Project\\SourceCode.asm",
+              "RelativeDocumentMoniker": "SourceCode.asm",
+              "ToolTip": "D:\\Uni\\Semester 3\\COAL\\Theory\\COAL Project\\SourceCode.asm",
+              "RelativeToolTip": "SourceCode.asm",
+              "ViewState": "AgIAAFYEAAAAAAAAAAAqwGsEAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-11-14T15:24:31.371Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

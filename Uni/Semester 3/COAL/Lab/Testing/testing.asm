@@ -1,12 +1,18 @@
 ﻿INCLUDE Irvine32.inc
 
+.code
+
+
 
 .data
-    msg byte "Hello World", 0
-    temp dword ?
-.code   
-main PROC
-    mov edx, offset msg
-    call writestring
+main Proc
+mov ax, -128
+shl eax, 16
+call writeint
+call crlf
+sar eax, 16
+call writeiny
+call crlf
+
 main ENDP
 END main

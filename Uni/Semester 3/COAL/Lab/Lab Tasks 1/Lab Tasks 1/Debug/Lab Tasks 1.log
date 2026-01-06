@@ -1,2 +1,5 @@
 ﻿  Assembling Source.asm...
-  Lab Tasks 1.vcxproj -> D:\Uni\Semester 3\COAL\Lab\Lab Tasks 1\Debug\Lab Tasks 1.exe
+Source.asm(12): error A2008: syntax error : bt
+Source.asm(8): error A2206: missing operator in expression
+Source.asm(25): error A2006: undefined symbol : msgs
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\BuildCustomizations\masm.targets(70,5): error MSB3721: The command "ml.exe /c /nologo /Zi /Fo"Lab Tasks 1\Debug\Source.obj" /I "D:\Uni\Semester 3\COAL\irvine" /W3 /errorReport:prompt  /TaSource.asm" exited with code 1.
