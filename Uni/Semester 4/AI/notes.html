@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI-2002 Master Study Guide</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      margin: 24px;
+      color: #111;
+    }
+    h1, h2, h3, h4 {
+      color: #1f2933;
+      page-break-after: avoid;
+    }
+    h1 { border-bottom: 2px solid #e5e7eb; padding-bottom: 4px; }
+    h2 { margin-top: 24px; }
+    h3 { margin-top: 18px; }
+    p { margin: 8px 0; }
+    ul, ol { margin: 4px 0 8px 22px; }
+    code {
+      font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      background: #f3f4f6;
+      padding: 1px 3px;
+      border-radius: 3px;
+      font-size: 0.95em;
+    }
+    pre {
+      background: #111827;
+      color: #e5e7eb;
+      padding: 12px 14px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.9em;
+      margin: 10px 0 14px;
+    }
+    pre code {
+      background: transparent;
+      padding: 0;
+    }
+    table {
+      border-collapse: collapse;
+      margin: 8px 0 14px;
+      width: 100%;
+      max-width: 680px;
+      page-break-inside: avoid;
+      font-size: 0.95em;
+    }
+    th, td {
+      border: 1px solid #d1d5db;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #e5e7eb;
+      margin: 24px 0;
+      page-break-after: avoid;
+    }
+    .small-note {
+      font-size: 0.9em;
+      color: #4b5563;
+    }
+    .section-break {
+      margin-top: 32px;
+      margin-bottom: 8px;
+      border-top: 2px solid #e5e7eb;
+    }
+    .img-block {
+      margin: 10px 0 4px;
+      page-break-inside: avoid;
+      text-align: center;
+    }
+    .img-block img {
+      max-width: 100%;
+      height: auto;
+    }
+    .img-caption {
+      font-size: 0.9em;
+      color: #4b5563;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📖 How to Use This Guide</h1>
+<p>
+  This page consolidates all lab topics into a single, exam-ready reference.
+  Each module includes: crisp definitions, annotated diagrams, highlighted
+  “must-know” functions, step-by-step templates, and at least three classical
+  problems with worked outlines. Use it for deep dives and quick-recall
+  checklists before the exam.
+</p>
+
+<hr class="section-break" />
+
+<h1>🎲 Module 1 — Adversarial Search &amp; Game Theory (Lab 8)</h1>
+<p>
+  <strong>Core Idea:</strong> In two-player, zero-sum, perfect-information games,
+  choose actions that maximize your outcome assuming an optimal adversary. Build
+  a game tree, evaluate leaves, back up values with Minimax, and prune with
+  Alpha–Beta.
+</p>
+
+<h2>🎮 Game Model Essentials</h2>
+<table>
+  <thead>
+    <tr><th>Component</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Initial State</td><td>starting position</td></tr>
+    <tr><td>Player(s)</td><td>MAX or MIN to move</td></tr>
+    <tr><td>Actions</td><td>legal moves generator</td></tr>
+    <tr><td>Transition Model</td><td>next state from (s, a)</td></tr>
+    <tr><td>Terminal-Test</td><td><code>isEnd(s)</code> → True/False</td></tr>
+    <tr><td>Utility(s)</td><td>payoff at terminal (e.g., +1/0/−1)</td></tr>
+  </tbody>
+</table>
+
+<h2>📈 Visual: Game Tree Flow</h2>
+<p><strong>Decision Levels</strong></p>
+<ul>
+  <li>L0: MAX chooses best child</li>
+  <li>L1: MIN chooses worst for MAX</li>
+  <li>Repeat until leaves</li>
+</ul>
+
+<p><strong>Value Backup</strong></p>
+<ul>
+  <li>Leaf eval → heuristic/utility</li>
+  <li>MIN node: <code>min(children)</code></li>
+  <li>MAX node: <code>max(children)</code></li>
+</ul>
+
+<h2>💡 Must-Know Functions (Conceptual)</h2>
+<table>
+  <thead>
+    <tr><th>Function</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>actions(s)</code></td><td>list of legal moves</td></tr>
+    <tr><td><code>result(s, a)</code></td><td>next state</td></tr>
+    <tr><td><code>terminal_test(s)</code></td><td>boolean terminal check</td></tr>
+    <tr><td><code>utility(s)</code> or <code>heuristic(s)</code></td><td>score</td></tr>
+  </tbody>
+</table>
+
+<h2>📜 Minimax: Template</h2>
+<pre><code class="language-python">def minimax(s, depth, maximizing):
+    if depth == 0 or terminal_test(s):
+        return heuristic(s)
+    if maximizing:
+        v = -float("inf")
+        for a in actions(s):
+            v = max(v, minimax(result(s, a), depth-1, False))
+        return v
+    else:
+        v = float("inf")
+        for a in actions(s):
+            v = min(v, minimax(result(s, a), depth-1, True))
+        return v
+</code></pre>
+
+<h2>✂ Alpha–Beta Pruning: Template</h2>
+<pre><code class="language-python">def alphabeta(s, depth, alpha, beta, maximizing):
+    if depth == 0 or terminal_test(s):
+        return heuristic(s)
+    if maximizing:
+        v = -float("inf")
+        for a in actions(s):
+            v = max(v, alphabeta(result(s, a), depth-1, alpha, beta, False))
+            alpha = max(alpha, v)
+            if beta &lt;= alpha:
+                break  # prune
+        return v
+    else:
+        v = float("inf")
+        for a in actions(s):
+            v = min(v, alphabeta(result(s, a), depth-1, alpha, beta, True))
+            beta = min(beta, v)
+            if beta &lt;= alpha:
+                break  # prune
+        return v
+</code></pre>
+
+<p class="small-note">
+  <strong>Exam Tip:</strong> Alpha–Beta never changes the returned minimax
+  value. It only reduces explored nodes. Best-case complexity with optimal move
+  ordering approaches O(b^(m/2)).
+</p>
+
+<h2>🏆 Three Classical Problems (with Outlines)</h2>
+<ol>
+  <li>
+    <strong>Tic-Tac-Toe Optimal Play</strong><br />
+    <strong>State:</strong> 3×3 grid;
+    <strong>Actions:</strong> place mark;
+    <strong>Terminal:</strong> win/lose/draw;
+    <strong>Utility:</strong> +1/−1/0.<br />
+    <strong>Heuristic (non-terminal):</strong> counts of open lines.
+    Use <code>alphabeta</code> depth-limited = remaining cells.
+    Move ordering: center → corners → edges.
+  </li>
+  <li>
+    <strong>Connect-Four Depth-Limited Search</strong><br />
+    <strong>State:</strong> 7×6 board;
+    <strong>Actions:</strong> drop in non-full column;
+    <strong>Heuristic:</strong> weighted patterns (open 2/3/4).<br />
+    Techniques: transposition table, iterative deepening, alpha–beta with
+    column ordering (center-first).
+  </li>
+  <li>
+    <strong>Chess Mini-Engine (Fragment)</strong><br />
+    <strong>State:</strong> FEN;
+    <strong>Heuristic:</strong> material + piece-square tables.<br />
+    Enhancements: quiescence search to avoid horizon effect; move ordering
+    via captures/killer moves; time control via iterative deepening +
+    aspiration windows.
+  </li>
+</ol>
+
+<hr class="section-break" />
+
+<h1>🧩 Module 2 — Constraint Satisfaction Problems with OR-Tools</h1>
+<p>
+  <strong>Core Idea:</strong> Assign values to variables from finite domains
+  so all constraints hold. Solve via CP-SAT search with propagation.
+</p>
+
+<h2>⚙ CSP Ingredients</h2>
+<table>
+  <thead>
+    <tr><th>Component</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Variables</td><td>X = {x1,…,xn}</td></tr>
+    <tr><td>Domains</td><td>D(xi) finite sets or ranges</td></tr>
+    <tr><td>Constraints</td><td>C over subsets of X (e.g., AllDifferent, arithmetic, reified)</td></tr>
+  </tbody>
+</table>
+
+<h2>🔑 OR-Tools CP-SAT: Must-Know API</h2>
+<table>
+  <thead>
+    <tr><th>API Call</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>cp_model.CpModel()</code>, <code>cp_model.CpSolver()</code></td>
+      <td>Initialize model and solver</td>
+    </tr>
+    <tr>
+      <td><code>NewIntVar(lb, ub, name)</code>, <code>NewBoolVar(name)</code></td>
+      <td>Create integer and boolean variables</td>
+    </tr>
+    <tr>
+      <td><code>model.Add(x != y)</code>, <code>model.AddAllDifferent(vars)</code></td>
+      <td>Add various types of constraints</td>
+    </tr>
+    <tr>
+      <td><code>OnlyEnforceIf(b)</code></td>
+      <td>Reification (conditional constraints)</td>
+    </tr>
+    <tr>
+      <td><code>solver.Solve(model)</code>, <code>solver.Value(x)</code>, <code>solver.StatusName(status)</code></td>
+      <td>Solve the model and retrieve results</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>📜 General CP-SAT Template</h2>
+<pre><code class="language-python">from ortools.sat.python import cp_model
+
+m = cp_model.CpModel()
+# 1) Variables
+x = [m.NewIntVar(1, 9, f"x{i}") for i in range(9)]
+# 2) Constraints
+m.AddAllDifferent(x)
+# 3) Optional objective
+# m.Maximize(x[0] + x[1])
+# 4) Solve
+s = cp_model.CpSolver()
+status = s.Solve(m)
+print(cp_model.OPTIMAL == status, [s.Value(v) for v in x])
+</code></pre>
+
+<h2>🏆 Three Classical CSP Problems</h2>
+<ol>
+  <li>
+    <strong>Map Coloring (Four-Color style)</strong><br />
+    <strong>Vars:</strong> region colors 1..4.<br />
+    <strong>Constraints:</strong> adjacent regions ≠.<br />
+    <strong>Tricks:</strong> use <code>model.Add(x[i] != x[j])</code> per edge;
+    symmetry-break by fixing first region’s color; optional objective: minimize
+    color index spread.
+  </li>
+  <li>
+    <strong>N-Queens</strong><br />
+    <strong>Vars:</strong> <code>q[i]</code> column of queen in row i,
+    domain 0..N−1.<br />
+    <strong>Constraints:</strong> <code>AllDifferent(q)</code>,
+    <code>AllDifferent(q[i]+i)</code>, <code>AllDifferent(q[i]−i)</code>.<br />
+    Scale: N up to a few thousands with CP-SAT; add search hints via
+    <code>m.AddHint</code>.
+  </li>
+  <li>
+    <strong>Sudoku (9×9)</strong><br />
+    <strong>Vars:</strong> <code>cell[r][c]</code> in 1..9.<br />
+    <strong>Constraints:</strong> row/col/subgrid AllDifferent; fix clues; optional
+    decision strategy:
+    <code>m.AddDecisionStrategy(flat_vars, cp_model.CHOOSE_FIRST, cp_model.SELECT_MIN_VALUE)</code>
+    for speed.
+  </li>
+</ol>
+
+<hr class="section-break" />
+
+<h1>📊 Module 3 — Scikit-Learn &amp; Data Preprocessing</h1>
+<p>
+  <strong>Core Idea:</strong> Clean data → split → transform → fit → predict →
+  evaluate → iterate. Pipelines keep preprocessing tied to the estimator.
+</p>
+
+<h2>➡ End-to-End Workflow</h2>
+<table>
+  <thead>
+    <tr><th>Step</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Split</td>
+      <td><code>train_test_split(X, y, test_size=0.2, random_state=42)</code></td>
+    </tr>
+    <tr>
+      <td>Preprocess</td>
+      <td><code>StandardScaler</code> or <code>MinMaxScaler</code>, <code>OneHotEncoder</code>, <code>LabelEncoder</code></td>
+    </tr>
+    <tr><td>Model</td><td><code>fit()</code></td></tr>
+    <tr><td>Predict</td><td><code>predict()</code></td></tr>
+    <tr>
+      <td>Evaluate</td>
+      <td><code>score()</code>, <code>accuracy_score</code>, <code>mean_squared_error</code>, <code>r2_score</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>📜 Pipeline Template</h2>
+<pre><code class="language-python">from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+num_pipe = Pipeline([("scaler", StandardScaler())])
+cat_pipe = Pipeline([("oh", OneHotEncoder(handle_unknown="ignore"))])
+
+pre = ColumnTransformer([
+    ("num", num_pipe, num_cols),
+    ("cat", cat_pipe, cat_cols),
+])
+
+clf = Pipeline([
+    ("pre", pre),
+    ("est", LogisticRegression(max_iter=1000)),
+])
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, stratify=y, random_state=42
+)
+clf.fit(X_train, y_train)
+print(clf.score(X_test, y_test))
+</code></pre>
+
+<h2>⭐ Highlight: Essential Functions</h2>
+<table>
+  <thead>
+    <tr><th>Category</th><th>Functions</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Model Training &amp; Evaluation</td>
+      <td><code>train_test_split</code>, <code>fit</code>, <code>predict</code>, <code>score</code></td>
+    </tr>
+    <tr>
+      <td>Preprocessing</td>
+      <td><code>StandardScaler</code>, <code>MinMaxScaler</code>, <code>OneHotEncoder</code>, <code>LabelEncoder</code></td>
+    </tr>
+    <tr>
+      <td>Utilities</td>
+      <td><code>Pipeline</code>, <code>ColumnTransformer</code>, <code>GridSearchCV</code>, <code>cross_val_score</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr class="section-break" />
+
+<h1>🤖 Module 4 — Supervised Learning (Lab 10)</h1>
+<p>
+  <strong>Core Idea:</strong> Learn mapping x → y from labeled data for
+  regression (continuous y) and classification (categorical y).
+</p>
+
+<h2>📏 Linear Regression</h2>
+<p>
+  <strong>Model:</strong> y = β0 + β1 x (+ higher dims).
+  <strong>Training:</strong> minimize MSE.
+  <strong>Metrics:</strong> MSE, RMSE, R².
+</p>
+<pre><code class="language-python">from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+lr = LinearRegression().fit(X_train, y_train)
+pred = lr.predict(X_test)
+print("RMSE", mean_squared_error(y_test, pred, squared=False),
+      "R2", r2_score(y_test, pred))
+</code></pre>
+
+<h2>🔎 Classification Algorithms: Quick Map</h2>
+<table>
+  <thead>
+    <tr><th>Algorithm</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>LogisticRegression()</strong></td><td>probabilities via sigmoid/softmax</td></tr>
+    <tr><td><strong>SVC()</strong></td><td>max-margin, kernels (linear, rbf, poly)</td></tr>
+    <tr><td><strong>KNeighborsClassifier()</strong></td><td>voting among k nearest</td></tr>
+    <tr><td><strong>RandomForestClassifier()</strong></td><td>ensemble of trees, robust</td></tr>
+    <tr><td><strong>DecisionTreeClassifier()</strong></td><td>interpretable splits (Gini/Entropy)</td></tr>
+  </tbody>
+</table>
+
+<h2>📜 Decision Tree Classifier: Template</h2>
+<pre><code class="language-python">from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+
+dt = DecisionTreeClassifier(random_state=42)
+dt.fit(X_train, y_train)
+pred = dt.predict(X_test)
+print("Train", dt.score(X_train, y_train),
+      "Test", accuracy_score(y_test, pred))
+</code></pre>
+
+<p class="small-note">
+  <strong>Best Practices:</strong> tune <code>max_depth</code>,
+  <code>min_samples_split</code>, <code>min_samples_leaf</code>; prefer
+  ensembles (RandomForest, GradientBoosting) for accuracy; keep trees shallow
+  for interpretability.
+</p>
+
+<h2>🏆 Three Classical Supervised Problems</h2>
+<ol>
+  <li>
+    <strong>Iris Classification with SVM</strong><br />
+    Binary target (e.g., setosa vs others) → <code>SVC(kernel="rbf", C=1, gamma="scale")</code>,
+    standardize features, evaluate with accuracy and confusion matrix.
+  </li>
+  <li>
+    <strong>House Prices Regression</strong><br />
+    Numerical + categorical features → ColumnTransformer (scale numeric, one-hot
+    categorical), model via <code>LinearRegression</code> or
+    <code>RandomForestRegressor</code>, metric RMSE.
+  </li>
+  <li>
+    <strong>Spam Detection (Logistic Regression)</strong><br />
+    TF-IDF vectorization → <code>LogisticRegression(max_iter=1000)</code>,
+    metrics: accuracy, precision, recall, F1; handle class imbalance with
+    <code>class_weight="balanced"</code>.
+  </li>
+</ol>
+
+<hr class="section-break" />
+
+<h1>🧬 Module 5 — Unsupervised Learning (Lab 11)</h1>
+<p>
+  <strong>Core Idea:</strong> Discover structure without labels—clustering,
+  association, dimensionality reduction.
+</p>
+
+<h2>💎 K-Means Clustering</h2>
+<p>
+  <strong>Goal:</strong> partition into K clusters minimizing within-cluster
+  SSE. <strong>Init:</strong> k-means++. <strong>Scale:</strong> standardize
+  features.
+</p>
+<pre><code class="language-python">from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+
+sc = StandardScaler()
+Xs = sc.fit_transform(X)
+km = KMeans(n_clusters=K, init="k-means++", random_state=42)
+labels = km.fit_predict(Xs)
+</code></pre>
+
+<h2>📉 Choosing K (Elbow &amp; Silhouette)</h2>
+<pre><code class="language-python">import numpy as np
+from sklearn.metrics import silhouette_score
+
+wcss, sil = [], []
+for k in range(2, 11):
+    km = KMeans(n_clusters=k, init="k-means++", random_state=42).fit(Xs)
+    wcss.append(km.inertia_)
+    sil.append(silhouette_score(Xs, km.labels_))
+</code></pre>
+
+<h2>🏆 Three Classical Unsupervised Problems</h2>
+<ol>
+  <li>
+    <strong>Customer Segmentation</strong><br />
+    Use (income, spend_score, recency, frequency, monetary). Standardize, run
+    k-means, profile clusters via means; validate with silhouette.
+  </li>
+  <li>
+    <strong>Image Compression with K-Means</strong><br />
+    Reshape pixels to (N, 3), fit K clusters in RGB space, replace each pixel by
+    its centroid color, reshape back to image.
+  </li>
+  <li>
+    <strong>Document Clustering</strong><br />
+    TF-IDF features → k-means or MiniBatchKMeans; evaluate qualitatively via top
+    terms per cluster and silhouette where feasible.
+  </li>
+</ol>
+
+<hr class="section-break" />
+
+<h1>🎨 Module 6 — Data Visualization</h1>
+<p>
+  <strong>Core Idea:</strong> Use Matplotlib for flexible primitives and Seaborn
+  for quick statistical plots. Always label axes, title plots, and choose
+  appropriate chart types.
+</p>
+
+<h2>📜 Matplotlib: Quick Template</h2>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+
+plt.figure(figsize=(6, 4))
+plt.scatter(X[:, 0], X[:, 1], c=labels, cmap="tab10")
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.title("Clusters")
+plt.grid(True, alpha=.3)
+plt.tight_layout()
+plt.show()
+</code></pre>
+
+<h2>📜 Seaborn: Quick Template</h2>
+<pre><code class="language-python">import seaborn as sns
+
+sns.set_theme(style="whitegrid")
+ax = sns.boxplot(data=df, x="category", y="value")
+ax.set_title("Distribution by Category")
+</code></pre>
+
+<h2>⭐ High-Value Plots</h2>
+<table>
+  <thead>
+    <tr><th>Plot Type</th><th>Code Snippet</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Confusion Matrix</td><td><code>sns.heatmap(cm, annot=True, fmt="d")</code></td></tr>
+    <tr><td>Pairwise EDA</td><td><code>sns.pairplot(df[num_cols], hue="target")</code></td></tr>
+    <tr><td>Residuals</td><td><code>sns.residplot(x=y_pred, y=y_true - y_pred)</code></td></tr>
+  </tbody>
+</table>
+
+<hr class="section-break" />
+
+<h1>🔧 Universal Problem-Solving Patterns</h1>
+
+<p><strong>Search (Adversarial)</strong></p>
+<ul>
+  <li>Model state + moves</li>
+  <li>Depth limit + heuristic</li>
+  <li>Alpha–Beta + move ordering</li>
+</ul>
+
+<p><strong>CSP (OR-Tools)</strong></p>
+<ul>
+  <li>Vars → Domains → Constraints</li>
+  <li>Use AllDifferent, reification</li>
+  <li>Optionally add objective</li>
+</ul>
+
+<p><strong>ML (sklearn)</strong></p>
+<ul>
+  <li>Split → Preprocess → Fit</li>
+  <li>Validate (CV/metrics)</li>
+  <li>Tune → Explain → Deploy</li>
+</ul>
+
+<hr class="section-break" />
+
+<h1>🎨 Diagrams and Cheatsheets</h1>
+
+<p class="small-note">
+  (In your Confluence page, these are images like seaborn.png, sklearn.png,
+  ortools.png. When editing this HTML, you can insert them as
+  <code>&lt;img src="..." /&gt;</code> blocks.)
+</p>
+
+<h2>Scikit-learn Pipeline Example (Colored Comments)</h2>
+<pre><code class="language-python"># Colored example: sklearn pipeline with highlights
+from sklearn.pipeline import Pipeline  # blue
+from sklearn.preprocessing import StandardScaler  # green
+from sklearn.svm import SVC  # purple
+
+clf = Pipeline([
+    ("scaler", StandardScaler()),  # green
+    ("svc", SVC(kernel="rbf", C=1.0, gamma="scale")),  # purple
+])
+</code></pre>
+
+<h2>Mermaid Diagram: ML Pipeline (Text Version)</h2>
+<pre><code>flowchart LR
+A[Data] --> B[Split Train/Test]
+B --> C[Preprocess: Scale/Encode]
+C --> D[Model: Fit]
+D --> E[Predict]
+E --> F[Evaluate]
+</code></pre>
+
+<p class="small-note">
+  You can keep this as text in the PDF, or generate the diagram separately
+  (e.g., in draw.io) and embed it as an image.
+</p>
+
+<hr class="section-break" />
+
+<h1>📋 General Templates Library</h1>
+
+<h2>Classification Project Skeleton</h2>
+<pre><code class="language-python"># 1) Load data
+# 2) Split
+# 3) ColumnTransformer (scale num, one-hot cat)
+# 4) Pipeline(est=LogisticRegression/SVC/RF)
+# 5) Cross-validate (accuracy, f1)
+# 6) Fit on train, evaluate on test
+# 7) Explain (coef_/feature_importances_), confusion matrix
+</code></pre>
+
+<h2>Regression Project Skeleton</h2>
+<pre><code class="language-python"># 1) EDA: scatter, corr heatmap
+# 2) Split
+# 3) Preprocess (scaler, OHE)
+# 4) Model: LinearRegression/RandomForestRegressor
+# 5) Metrics: RMSE, MAE, R2
+# 6) Diagnose residuals plots
+</code></pre>
+
+<h2>Clustering Analysis Skeleton</h2>
+<pre><code class="language-python"># 1) Scale features
+# 2) Try k=2..10: inertia, silhouette
+# 3) Choose K (elbow + silhouette)
+# 4) Fit KMeans, label data
+# 5) Profile clusters (means, counts)
+# 6) Visualize (2D proj via PCA if needed)
+</code></pre>
+
+<h2>Minimax/Alpha–Beta Engine Skeleton</h2>
+<pre><code class="language-python">class Game:
+    def actions(self, s):
+        ...
+    def result(self, s, a):
+        ...
+    def terminal(self, s):
+        ...
+    def utility(self, s):
+        ...
+    def heuristic(self, s):
+        ...
+
+# plug into alphabeta(s, depth, -inf, +inf, True)
+</code></pre>
+
+<h2>OR-Tools CSP Skeleton</h2>
+<pre><code class="language-python">from ortools.sat.python import cp_model
+
+m = cp_model.CpModel()
+# Variables
+# Constraints (Add, AddAllDifferent, OnlyEnforceIf)
+s = cp_model.CpSolver()
+status = s.Solve(m)
+if status in (cp_model.OPTIMAL, cp_model.FEASIBLE):
+    # read values with s.Value(var)
+    ...
+</code></pre>
+
+<hr class="section-break" />
+
+<h1>✅ Exam Checklists</h1>
+<table>
+  <thead>
+    <tr><th>Topic</th><th>Checklist Items</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Adversarial</td>
+      <td>define utility/heuristic; implement alpha–beta; justify pruning; mention move ordering</td>
+    </tr>
+    <tr>
+      <td>CSP</td>
+      <td>list vars/domains/constraints; encode AllDifferent; show one reified constraint</td>
+    </tr>
+    <tr>
+      <td>Supervised</td>
+      <td>clear metric choice; proper preprocessing; avoid leakage (fit transforms only on train)</td>
+    </tr>
+    <tr>
+      <td>Unsupervised</td>
+      <td>scaling; method to pick K; qualitative cluster profiling</td>
+    </tr>
+    <tr>
+      <td>Visualization</td>
+      <td>labels, title, legend; diagnostic plots for models</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr class="section-break" />
+
+<h1>❓ FAQs</h1>
+
+<p><strong>When do I use StandardScaler vs MinMaxScaler?</strong><br />
+StandardScaler for algorithms assuming standardized features (SVM, LR,
+k-means distance-based); MinMaxScaler for bounded features or when preserving
+zero sparsity and scale-sensitive models.</p>
+
+<p><strong>Does Alpha–Beta change the optimal move?</strong><br />
+No. It prunes unreachable branches but preserves the exact minimax decision.</p>
+
+<p><strong>How to avoid data leakage in sklearn?</strong><br />
+Use Pipelines / ColumnTransformer; fit scalers/encoders on training data only;
+perform cross-validation on the full pipeline.</p>
+
+<hr class="section-break" />
+
+<h1>🔗 References</h1>
+<ul>
+  <li>Provided lab PDFs and cheatsheets (Seaborn, Scikit-learn, Matplotlib, OR-Tools).</li>
+</ul>
+
+</body>
+</html>
